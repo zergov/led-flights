@@ -52,7 +52,7 @@ def load_dump1090_aircraft_data(filepath: str) -> list[dict]:
     return aircrafts
 
 
-dump1090_file = "./dump1090_aicraft.json"
+dump1090_file = "./dump1090_aircraft.json"
 if len(sys.argv) > 1:
     dump1090_file = sys.argv[1]
 
