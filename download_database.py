@@ -70,7 +70,10 @@ with tempfile.TemporaryDirectory() as tmp_dir:
     print("extracting mictronics database...")
     zipfile.ZipFile(tmp, "r").extractall(tmp_dir)
 
-    os.remove("db.sqlite")
+    if os.path.exists("db.sqlite"):
+        print("removing old database...")
+        os.remove("db.sqlite")
+
     conn = sqlite3.connect("db.sqlite")
 
     store_aircrafts(conn, os.path.join(tmp_dir, "aircrafts.json"))
