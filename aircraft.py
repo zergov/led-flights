@@ -11,7 +11,7 @@ class Aircraft:
         self.db_data = db_data
 
     def icao_hex(self) -> str:
-        return self.data.get("hex")
+        return self.data.get("hex").upper()
 
     def flight(self):
         return self.data.get("flight", None)
