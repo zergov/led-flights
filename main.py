@@ -1,6 +1,7 @@
 import json
-import sqlite3
 import re
+import sqlite3
+import sys
 
 from aircraft import Aircraft
 
@@ -50,8 +51,12 @@ def load_dump1090_aircraft_data(filepath: str) -> list[Aircraft]:
     return aircrafts
 
 
+dump1090_file = "./dump1090_aicraft.json"
+if len(sys.argv) > 1:
+    dump1090_file = sys.argv[1]
+
 db_conn = sqlite3.connect("db.sqlite")
-dump1090_aircrafts = load_dump1090_aircraft_data("./dump1090_aicraft.json")
+dump1090_aircrafts = load_dump1090_aircraft_data(dump1090_file)
 
 for aircraft in dump1090_aircrafts:
     if not aircraft.has_aircraft_data():
