@@ -11,6 +11,10 @@ class Aircraft:
         self.aircraft_data = {}
         self.operator_data = {}
 
+    def update_dump1090_data(self, data):
+        data = { k: v for k,v in data.items() if v is not None }
+        self.dump1090_data = self.dump1090_data | data
+
     def has_aircraft_data(self) -> bool:
         return bool(self.aircraft_data)
 
