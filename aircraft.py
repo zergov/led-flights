@@ -9,12 +9,19 @@ class Aircraft:
     def __init__(self, data):
         self.dump1090_data = data
         self.aircraft_data = {}
+        self.operator_data = {}
 
     def has_aircraft_data(self) -> bool:
         return bool(self.aircraft_data)
 
     def update_aircraft_data(self, data):
         self.aircraft_data = data
+
+    def has_operator_data(self) -> bool:
+        return bool(self.operator_data)
+
+    def update_operator_data(self, data):
+        self.operator_data = data
 
     def icao_hex(self) -> str:
         return self.dump1090_data.get("hex").upper()
@@ -36,3 +43,12 @@ class Aircraft:
 
     def name(self):
         return self.aircraft_data.get("name", None)
+
+    def operator_prefix(self):
+        return self.operator_data.get("prefix", None)
+
+    def operator_name(self):
+        return self.operator_data.get("name", None)
+
+    def operator_country(self):
+        return self.operator_data.get("country", None)

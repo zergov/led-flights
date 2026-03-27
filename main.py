@@ -55,8 +55,12 @@ dump1090_aircrafts = load_dump1090_aircraft_data("./dump1090_aicraft.json")
 
 for aircraft in dump1090_aircrafts:
     if not aircraft.has_aircraft_data():
-        db_data = load_aircraft_data_by_icao(db_conn, aircraft.icao_hex())
-        aircraft.update_aircraft_data(db_data)
+        aircraft_data = load_aircraft_data_by_icao(db_conn, aircraft.icao_hex())
+        aircraft.update_aircraft_data(aircraft_data)
+
+    if aircraft.flight() and not aircraft.has_operator_data():
+        operator_data = load_operator_data_by_callsign(db_conn, aircraft.flight())
+        aircraft.update_operator_data(operator_data)
 
     print("------------------------------")
     print("ICAO: ", aircraft.icao_hex())
@@ -66,10 +70,6 @@ for aircraft in dump1090_aircrafts:
     print("FLIGHT: ", aircraft.flight())
     print("ALTITUDE: ", aircraft.altitude())
     print("REGISTRATION: ", aircraft.registration())
-
-    if aircraft.flight():
-        operator = load_operator_data_by_callsign(db_conn, aircraft.flight())
-
-        print("OPERATOR PREFIX: ", operator.get("prefix", None))
-        print("OPERATOR NAME: ", operator.get("name", None))
-        print("OPERATOR COUNTRY: ", operator.get("country", None))
+    print("OPERATOR PREFIX: ", aircraft.operator_prefix())
+    print("OPERATOR NAME: ", aircraft.operator_name())
+    print("OPERATOR COUNTRY: ", aircraft.operator_country())
