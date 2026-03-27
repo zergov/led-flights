@@ -7,32 +7,32 @@ class Aircraft:
     """
 
     def __init__(self, data):
-        self.data = data
-        self.db_data = {}
+        self.dump1090_data = data
+        self.aircraft_data = {}
 
     def has_aircraft_data(self) -> bool:
-        return bool(self.db_data)
+        return bool(self.aircraft_data)
 
     def update_aircraft_data(self, data):
-        self.db_data = data
+        self.aircraft_data = data
 
     def icao_hex(self) -> str:
-        return self.data.get("hex").upper()
+        return self.dump1090_data.get("hex").upper()
 
     def flight(self):
-        return self.data.get("flight", None)
+        return self.dump1090_data.get("flight", None)
 
     def altitude(self):
-        return self.data.get("alt_baro", None)
+        return self.dump1090_data.get("alt_baro", None)
 
     def squawk(self):
-        return self.data.get("squawk", None)
+        return self.dump1090_data.get("squawk", None)
 
     def registration(self):
-        return self.db_data.get("registration", None)
+        return self.aircraft_data.get("registration", None)
 
     def aircraft_type(self):
-        return self.db_data.get("type", None)
+        return self.aircraft_data.get("type", None)
 
     def name(self):
-        return self.db_data.get("name", None)
+        return self.aircraft_data.get("name", None)
