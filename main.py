@@ -12,7 +12,8 @@ def load_aircraft_data_by_icao(conn: sqlite3.Connection, icao: str) -> dict:
     cursor.execute("SELECT * FROM aircrafts WHERE icao = ?", (icao.upper(),))
 
     aircraft = {}
-    for row in cursor.fetchall():
+    row = cursor.fetchone()
+    if row:
         icao, registration, aircraft_type, name = row
         aircraft["icao"] = icao
         aircraft["registration"] = registration
