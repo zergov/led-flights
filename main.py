@@ -19,7 +19,7 @@ def load_aircraft_data_by_icao(conn: sqlite3.Connection, icao: str) -> dict:
     return aircraft
 
 
-with open("/tmp/aircraft.json", "r") as f:
+with open("./dump1090_aicraft.json") as f:
     data = json.loads(f.read())
     aircrafts: dict[str, Aircraft] = {}
 
