@@ -45,7 +45,7 @@ def load_dump1090_aircraft_data(filepath: str) -> list[Aircraft]:
         data = json.loads(f.read())
 
         for aircraft_data in data["aircraft"]:
-            aircrafts.append(Aircraft(aircraft_data, {}))
+            aircrafts.append(Aircraft(aircraft_data))
 
     return aircrafts
 
@@ -54,7 +54,9 @@ db_conn = sqlite3.connect("db.sqlite")
 dump1090_aircrafts = load_dump1090_aircraft_data("./dump1090_aicraft.json")
 
 for aircraft in dump1090_aircrafts:
-    db_data = load_aircraft_data_by_icao(db_conn, aircraft.icao_hex())
+    if not aircraft.has_aircraft_data():
+        db_data = load_aircraft_data_by_icao(db_conn, aircraft.icao_hex())
+        aircraft.update_aircraft_data(db_data)
 
     print("------------------------------")
     print("ICAO: ", aircraft.icao_hex())
