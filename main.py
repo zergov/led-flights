@@ -65,22 +65,22 @@ while True:
 
     dump1090_aircrafts = load_dump1090_aircraft_data(dump1090_file)
 
-    for aircraft_data in dump1090_aircrafts:
-        icao = aircraft_data["hex"]
+    for dump1090_aircraft in dump1090_aircrafts:
+        icao = dump1090_aircraft["hex"]
 
         if not icao:
             pass
 
         icao = icao.upper()
-        aircraft = aircrafts_nearby.get(icao, Aircraft(aircraft_data))
-        aircraft.update_dump1090_data(aircraft_data)
+        aircraft = aircrafts_nearby.get(icao, Aircraft(dump1090_aircraft))
+        aircraft.update_dump1090_data(dump1090_aircraft)
         aircrafts_nearby[icao] = aircraft
 
         if not aircraft.has_aircraft_data():
             aircraft_data = load_aircraft_data_by_icao(db_conn, aircraft.icao_hex())
             aircraft.update_aircraft_data(aircraft_data)
 
-        if aircraft.flight() and not aircraft.has_operator_data():
+        if not aircraft.has_operator_data() and aircraft.flight():
             operator_data = load_operator_data_by_callsign(db_conn, aircraft.flight())
             aircraft.update_operator_data(operator_data)
 
