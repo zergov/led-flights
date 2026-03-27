@@ -38,31 +38,36 @@ def load_operator_data_by_callsign(conn: sqlite3.Connection, callsign: str) -> d
     return operator
 
 
-with open("./dump1090_aicraft.json") as f:
-    data = json.loads(f.read())
-    db_conn = sqlite3.connect("db.sqlite")
+def load_dump1090_aircraft_data(filepath: str) -> list[Aircraft]:
+    aircrafts = []
 
-    for aircraft_data in data["aircraft"]:
-        icao = aircraft_data["hex"]
+    with open(filepath) as f:
+        data = json.loads(f.read())
 
-        if not icao:
-            pass
+        for aircraft_data in data["aircraft"]:
+            aircrafts.append(Aircraft(aircraft_data, {}))
 
-        db_data = load_aircraft_data_by_icao(db_conn, icao)
-        aircraft = Aircraft(aircraft_data, db_data)
+    return aircrafts
 
-        print("------------------------------")
-        print("ICAO: ", aircraft.icao_hex())
-        print("SQUAWK: ", aircraft.squawk())
-        print("NAME: ", aircraft.name())
-        print("TYPE: ", aircraft.aircraft_type())
-        print("FLIGHT: ", aircraft.flight())
-        print("ALTITUDE: ", aircraft.altitude())
-        print("REGISTRATION: ", aircraft.registration())
 
-        if aircraft.flight():
-            operator = load_operator_data_by_callsign(db_conn, aircraft.flight())
+db_conn = sqlite3.connect("db.sqlite")
+dump1090_aircrafts = load_dump1090_aircraft_data("./dump1090_aicraft.json")
 
-            print("OPERATOR PREFIX: ", operator.get("prefix", None))
-            print("OPERATOR NAME: ", operator.get("name", None))
-            print("OPERATOR COUNTRY: ", operator.get("country", None))
+for aircraft in dump1090_aircrafts:
+    db_data = load_aircraft_data_by_icao(db_conn, aircraft.icao_hex())
+
+    print("------------------------------")
+    print("ICAO: ", aircraft.icao_hex())
+    print("SQUAWK: ", aircraft.squawk())
+    print("NAME: ", aircraft.name())
+    print("TYPE: ", aircraft.aircraft_type())
+    print("FLIGHT: ", aircraft.flight())
+    print("ALTITUDE: ", aircraft.altitude())
+    print("REGISTRATION: ", aircraft.registration())
+
+    if aircraft.flight():
+        operator = load_operator_data_by_callsign(db_conn, aircraft.flight())
+
+        print("OPERATOR PREFIX: ", operator.get("prefix", None))
+        print("OPERATOR NAME: ", operator.get("name", None))
+        print("OPERATOR COUNTRY: ", operator.get("country", None))
